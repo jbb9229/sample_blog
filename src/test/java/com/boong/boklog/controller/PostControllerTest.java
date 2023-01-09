@@ -130,7 +130,6 @@ class PostControllerTest {
         mockMvc.perform(get("/posts/{postId}", post.getId())
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(post.getId()))
                 .andExpect(jsonPath("$.title").value(post.getTitle()))
                 .andExpect(jsonPath("$.content").value(post.getContent()))
                 .andDo(print());
@@ -177,11 +176,32 @@ class PostControllerTest {
         postRepository.saveAll(requestPosts);
 
         // expected
-        mockMvc.perform(get("/posts?page=1&sort=id,desc&size=5")
+        mockMvc.perform(get("/posts?page=1&size=5")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(5)))
-                .andExpect(jsonPath("$[0].id").value(30))
+                .andExpect(jsonPath("$[0].title").value("Title of - 30"))
+                .andExpect(jsonPath("$[0].content").value("Content of - 30"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("페이지를 0으로 요청해도 1로 조회")
+    void test6() throws Exception {
+        // given
+        List<Post> requestPosts = IntStream.range(1, 31)
+                .mapToObj(i -> Post.builder()
+                        .title("Title of - " + i)
+                        .content("Content of - " + i)
+                        .build())
+                .collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
+
+        // expected
+        mockMvc.perform(get("/posts?page=0&size=5")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(5)))
                 .andExpect(jsonPath("$[0].title").value("Title of - 30"))
                 .andExpect(jsonPath("$[0].content").value("Content of - 30"))
                 .andDo(print());

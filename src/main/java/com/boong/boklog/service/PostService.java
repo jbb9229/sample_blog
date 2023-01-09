@@ -3,6 +3,7 @@ package com.boong.boklog.service;
 import com.boong.boklog.domain.Post;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
+import com.boong.boklog.request.PostSearch;
 import com.boong.boklog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,9 +58,9 @@ public class PostService {
                            .build();
     }
 
-    public List<PostResponse> getPosts(Pageable pageable) {
-        return postRepository.findAll(pageable).stream()
-                .map(PostResponse::new)
-                .collect(Collectors.toList());
+    public List<PostResponse> getPosts(PostSearch postSearch) {
+        return postRepository.getList(postSearch).stream()
+                             .map(PostResponse::new)
+                             .collect(Collectors.toList());
     }
 }

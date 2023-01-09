@@ -3,6 +3,7 @@ package com.boong.boklog.service;
 import com.boong.boklog.domain.Post;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
+import com.boong.boklog.request.PostSearch;
 import com.boong.boklog.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,7 +80,7 @@ class PostServiceTest {
     @DisplayName("글 한 페이지 조회")
     void test2() {
         // given
-        List<Post> requestPosts = IntStream.range(1, 31)
+        List<Post> requestPosts = IntStream.range(1, 21)
                                            .mapToObj(i -> Post.builder()
                                                               .title("Title of - " + i)
                                                               .content("Content of - " + i)
@@ -87,13 +88,16 @@ class PostServiceTest {
                                            .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
 
+        PostSearch postSearch = PostSearch.builder()
+                                          .page(1)
+                                          .build();
+
         // when
-        List<PostResponse> posts = postService.getPosts(PageRequest.of(0, 5, DESC, "id"));
+        List<PostResponse> posts = postService.getPosts(postSearch);
 
         // then
-        assertEquals(5, posts.size());
-        assertEquals("Title of - 30", posts.get(0).getTitle());
-        assertEquals("Title of - 26", posts.get(4).getTitle());
+        assertEquals(20L, posts.size());
+        assertEquals("Title of - 20", posts.get(0).getTitle());
     }
 
     @Test
