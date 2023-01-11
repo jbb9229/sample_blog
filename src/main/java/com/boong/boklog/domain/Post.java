@@ -25,8 +25,14 @@ public class Post {
         this.content = content;
     }
 
-    public void update(String title, String content) {
-        this.title = title == null ? this.title : title;
-        this.content = content == null ? this.content : content;
+    public PostEditor.PostEditorBuilder toEditor() {
+        return PostEditor.builder()
+                         .title(title)
+                         .content(content);
+    }
+
+    public void edit(PostEditor postEditor) {
+        title = postEditor.getTitle() == null ? title : postEditor.getTitle();
+        content = postEditor.getContent() == null ? content : postEditor.getContent();
     }
 }

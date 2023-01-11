@@ -3,6 +3,7 @@ package com.boong.boklog.controller;
 import com.boong.boklog.domain.Post;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
+import com.boong.boklog.request.PostEdit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +20,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -167,6 +167,30 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.length()", is(5)))
                 .andExpect(jsonPath("$[0].title").value("Title of - 30"))
                 .andExpect(jsonPath("$[0].content").value("Content of - 30"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void test7() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("boklog")
+                .content("nice")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit edit = PostEdit.builder()
+                .content("NICE")
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(edit))
+                )
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 

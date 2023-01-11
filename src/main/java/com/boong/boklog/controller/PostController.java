@@ -1,6 +1,7 @@
 package com.boong.boklog.controller;
 
 import com.boong.boklog.request.PostCreate;
+import com.boong.boklog.request.PostEdit;
 import com.boong.boklog.request.PostSearch;
 import com.boong.boklog.response.PostResponse;
 import com.boong.boklog.service.PostService;
@@ -33,6 +34,11 @@ public class PostController {
     public PostResponse get(@PathVariable(name = "postId") Long id) {
         PostResponse response = postService.get(id);
         return response;
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public PostResponse edit(@PathVariable(name = "postId") Long id, @RequestBody @Valid PostEdit postEdit) {
+        return postService.edit(id, postEdit);
     }
 
 }

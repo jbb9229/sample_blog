@@ -119,4 +119,28 @@ class PostServiceTest {
         assertEquals(editedPost.getContent(), "nice");
     }
 
+    @Test
+    @DisplayName("글 내용 수정")
+    void test5() {
+        // given
+        Post post = Post.builder()
+                .title("boklog")
+                .content("nice")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit edit = PostEdit.builder()
+                .content("NICE")
+                .build();
+
+        // when
+        postService.edit(post.getId(), edit);
+
+        // then
+        Post editedPost = postRepository.findById(post.getId()).orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        assertEquals(editedPost.getTitle(), "boklog");
+        assertEquals(editedPost.getContent(), "NICE");
+    }
+
 }
