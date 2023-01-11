@@ -4,9 +4,6 @@ import com.boong.boklog.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 
-/**
- * Service 정책을 위한 class
- */
 @Getter
 public class PostResponse {
 

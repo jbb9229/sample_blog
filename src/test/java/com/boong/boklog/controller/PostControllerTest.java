@@ -4,7 +4,6 @@ import com.boong.boklog.domain.Post;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,8 +51,7 @@ class PostControllerTest {
                                        .content("내용입니다.")
                                        .build();
         String json = mapper.writeValueAsString(request);
-        // post title
-        // post content
+
         // expected
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
@@ -73,19 +71,12 @@ class PostControllerTest {
                                        .build();
         String json = mapper.writeValueAsString(request);
 
-        // post title
-        // post content
         // expected
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
-//                        .content("{\"title\": \"\", \"content\": \"내용입니다.\"}")
-//                        null 이여도 NotBlank가 동작할까? -> 정상 동작
                         .content(json)
                 )
-//                .andExpect(status().isOk())
                 .andExpect(status().isBadRequest())
-//                .andExpect(content().string("Hello get"))
-//                .andExpect(jsonPath("$.title").value("타이틀을 입력해주세요."))
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
@@ -134,34 +125,6 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.content").value(post.getContent()))
                 .andDo(print());
     }
-
-//    @Test
-//    @DisplayName("글 여러개 조회")
-//    void test5() throws Exception {
-//        // given
-//        Post post = postRepository.save(Post.builder()
-//                                            .title("foo1")
-//                                            .content("bar1")
-//                                            .build());
-//
-//        Post post2 = postRepository.save(Post.builder()
-//                                             .title("foo2")
-//                                             .content("bar2")
-//                                             .build());
-//
-//        // expected
-//        mockMvc.perform(get("/posts")
-//                        .contentType(APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.length()", Matchers.is(2)))
-//                .andExpect(jsonPath("$[0].id").value(post.getId()))
-//                .andExpect(jsonPath("$[0].title").value(post.getTitle()))
-//                .andExpect(jsonPath("$[0].content").value(post.getContent()))
-//                .andExpect(jsonPath("$[1].id").value(post2.getId()))
-//                .andExpect(jsonPath("$[1].title").value(post2.getTitle()))
-//                .andExpect(jsonPath("$[1].content").value(post2.getContent()))
-//                .andDo(print());
-//    }
 
     @Test
     @DisplayName("글 여러개 조회")

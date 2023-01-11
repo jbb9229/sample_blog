@@ -18,15 +18,6 @@ public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
-//        log.error("exceptionHandler error", e);
-//        MethodArgumentNotValidException
-//        FieldError error = e.getFieldError();
-//        String field = error.getField();
-//        String errormsg = error.getDefaultMessage();
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put(field, errormsg);
-//        return response;
         if (e.hasErrors()) {
             ErrorResponse response = ErrorResponse.builder()
                                                   .code("400")

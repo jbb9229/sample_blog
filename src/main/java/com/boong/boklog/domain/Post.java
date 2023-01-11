@@ -17,7 +17,6 @@ public class Post {
     private Long id;
     private String title;
     @Lob
-    // Lob -> Java에서는 String 형태로 처리하지만 DB에서는 LongText 형태로 처리
     private String content;
 
     @Builder

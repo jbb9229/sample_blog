@@ -10,10 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +17,6 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @SpringBootTest
 class PostServiceTest {
@@ -54,27 +49,6 @@ class PostServiceTest {
         assertEquals(post.getTitle(), postCreate.getTitle());
         assertEquals(post.getContent(), postCreate.getContent());
     }
-
-//    @Test
-//    @DisplayName("글 여러개 조회")
-//    void test2() {
-//        // given
-//        postRepository.saveAll(
-//                List.of(Post.builder()
-//                            .title("foo1")
-//                            .content("bar1")
-//                            .build(),
-//                        Post.builder()
-//                            .title("foo2")
-//                            .content("bar2")
-//                            .build()));
-//
-//        // when
-//        List<Post> posts = postRepository.findAll();
-//
-//        // then
-//        assertEquals(2, posts.size());
-//    }
 
     @Test
     @DisplayName("글 한 페이지 조회")
