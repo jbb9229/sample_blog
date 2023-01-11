@@ -3,6 +3,7 @@ package com.boong.boklog.service;
 import com.boong.boklog.domain.Post;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
+import com.boong.boklog.request.PostEdit;
 import com.boong.boklog.request.PostSearch;
 import com.boong.boklog.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,6 +93,30 @@ class PostServiceTest {
         assertEquals(1L, postRepository.count());
         assertEquals(postResponse.getTitle(), requestPost.getTitle().substring(0, 10));
         assertEquals(postResponse.getContent(), requestPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+        // given
+        Post post = Post.builder()
+                        .title("boklog")
+                        .content("nice")
+                        .build();
+
+        postRepository.save(post);
+
+        PostEdit edit = PostEdit.builder()
+                                .title("BOKLOG")
+                                .build();
+
+        // when
+        postService.edit(post.getId(), edit);
+
+        // then
+        Post editedPost = postRepository.findById(post.getId()).orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        assertEquals(editedPost.getTitle(), "BOKLOG");
+        assertEquals(editedPost.getContent(), "nice");
     }
 
 }

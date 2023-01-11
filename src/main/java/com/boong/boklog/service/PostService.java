@@ -3,6 +3,7 @@ package com.boong.boklog.service;
 import com.boong.boklog.domain.Post;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
+import com.boong.boklog.request.PostEdit;
 import com.boong.boklog.request.PostSearch;
 import com.boong.boklog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,5 +50,13 @@ public class PostService {
         return postRepository.getList(postSearch).stream()
                              .map(PostResponse::new)
                              .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void edit(Long id, PostEdit edit) {
+        Post post = postRepository.findById(id)
+                                  .orElseThrow(() -> new IllegalArgumentException("존재 하지 않는 글입니다."));
+
+        post.update(edit.getTitle(), edit.getContent());
     }
 }
