@@ -32,7 +32,7 @@ public class Post {
     }
 
     public void edit(PostEditor postEditor) {
-        title = postEditor.getTitle() == null ? title : postEditor.getTitle();
-        content = postEditor.getContent() == null ? content : postEditor.getContent();
+        title = postEditor.getTitle();
+        content = postEditor.getContent();
     }
 }
