@@ -33,7 +33,7 @@ public class PostEditor {
         }
 
         public PostEditorBuilder content(final String content) {
-            if (title != null) {
+            if (content != null) {
                 this.content = content;
             }
             return this;
