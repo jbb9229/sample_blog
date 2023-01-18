@@ -1,6 +1,7 @@
 package com.boong.boklog.service;
 
 import com.boong.boklog.domain.Post;
+import com.boong.boklog.exception.PostNotFound;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
 import com.boong.boklog.request.PostEdit;
@@ -98,6 +99,20 @@ class PostServiceTest {
     }
 
     @Test
+    @DisplayName("글 한개 조회시 조회할 글이 없는 경우")
+    void test7() {
+        // given
+        Post requestPost = Post.builder()
+                .title("foobar1234567890")
+                .content("bar")
+                .build();
+        postRepository.save(requestPost);
+
+        // when
+        assertThrows(PostNotFound.class, () -> postService.get(requestPost.getId() + 1L));
+    }
+
+    @Test
     @DisplayName("글 제목 수정")
     void test4() {
         // given
@@ -116,7 +131,7 @@ class PostServiceTest {
         postService.edit(post.getId(), edit);
 
         // then
-        Post editedPost = postRepository.findById(post.getId()).orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        Post editedPost = postRepository.findById(post.getId()).orElseThrow(PostNotFound::new);
         assertEquals(editedPost.getTitle(), "BOKLOG");
         assertEquals(editedPost.getContent(), "nice");
     }
@@ -140,9 +155,28 @@ class PostServiceTest {
         postService.edit(post.getId(), edit);
 
         // then
-        Post editedPost = postRepository.findById(post.getId()).orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        Post editedPost = postRepository.findById(post.getId()).orElseThrow(PostNotFound::new);
         assertEquals(editedPost.getTitle(), "boklog");
         assertEquals(editedPost.getContent(), "NICE");
+    }
+
+    @Test
+    @DisplayName("글 내용 수정 시 게시글이 없는 경우")
+    void testPostUpdateNotFound() {
+        // given
+        Post post = Post.builder()
+                .title("boklog")
+                .content("nice")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit edit = PostEdit.builder()
+                .content("NICE")
+                .build();
+
+        // when
+        assertThrows(PostNotFound.class, () -> postService.edit(post.getId() + 1L, edit));
     }
 
     @Test
@@ -161,6 +195,21 @@ class PostServiceTest {
 
         // then
         assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 시 삭제할 게시글이 존재하지 않는 경우")
+    void testPostDeleteNotFound() {
+        // given
+        Post post = Post.builder()
+                .title("boklog")
+                .content("nice")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+        assertThrows(PostNotFound.class, () -> postService.delete(post.getId() + 1L));
     }
 
 }

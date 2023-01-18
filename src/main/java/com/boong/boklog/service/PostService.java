@@ -2,6 +2,7 @@ package com.boong.boklog.service;
 
 import com.boong.boklog.domain.Post;
 import com.boong.boklog.domain.PostEditor;
+import com.boong.boklog.exception.PostNotFound;
 import com.boong.boklog.repository.PostRepository;
 import com.boong.boklog.request.PostCreate;
 import com.boong.boklog.request.PostEdit;
@@ -34,7 +35,7 @@ public class PostService {
 
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                                  .orElseThrow(() -> new PostNotFound());
 
         return PostResponse.builder()
                            .id(post.getId())
@@ -52,7 +53,7 @@ public class PostService {
     @Transactional
     public PostResponse edit(Long id, PostEdit edit) {
         Post post = postRepository.findById(id)
-                                  .orElseThrow(() -> new IllegalArgumentException("존재 하지 않는 글입니다."));
+                                  .orElseThrow(() -> new PostNotFound());
 
         PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
 
@@ -66,7 +67,8 @@ public class PostService {
     }
 
     public void delete(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+        Post post = postRepository.findById(id)
+                                  .orElseThrow(() -> new PostNotFound());
 
         postRepository.delete(post);
     }
