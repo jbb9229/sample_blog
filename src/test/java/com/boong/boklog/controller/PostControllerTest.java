@@ -43,7 +43,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청 시 Hello get을 출력한다.")
+    @DisplayName("게시글 작성 테스트")
     void test() throws Exception {
         // given
         PostCreate request = PostCreate.builder()
@@ -236,6 +236,25 @@ class PostControllerTest {
                         .content(mapper.writeValueAsString(edit))
                 )
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 작성 테스트")
+    void testPostTitleStupidThrowInvalidRequest() throws Exception {
+        // given
+        PostCreate request = PostCreate.builder()
+                .title("나는 바보입니다.")
+                .content("내용입니다.")
+                .build();
+        String json = mapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(post("/posts")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
