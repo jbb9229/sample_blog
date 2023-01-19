@@ -213,4 +213,30 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    void testGetPostNotFound() throws Exception {
+        //expected
+        mockMvc.perform(get("/posts/{postId}", 1L)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    void testPatchPostNotFound() throws Exception {
+        PostEdit edit = PostEdit.builder()
+                .content("NICE")
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(edit))
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
 }
