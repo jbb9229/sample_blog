@@ -1,0 +1,13 @@
+= Boklog API Docs
+:toc:
+
+== /Posts/{PostId}
+
+=== curl
+include::{snippets}/index/curl-request.adoc[]
+=== httpie
+include::{snippets}/index/httpie-request.adoc[]
+=== request
+include::{snippets}/index/http-request.adoc[]
+=== response
+include::{snippets}/index/http-response.adoc[]
