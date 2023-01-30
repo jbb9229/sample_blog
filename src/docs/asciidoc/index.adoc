@@ -8,6 +8,8 @@ include::{snippets}/index/curl-request.adoc[]
 === httpie
 include::{snippets}/index/httpie-request.adoc[]
 === request
+include::{snippets}/index/path-parameters.adoc[]
 include::{snippets}/index/http-request.adoc[]
 === response
+include::{snippets}/index/response-fields.adoc[]
 include::{snippets}/index/http-response.adoc[]
